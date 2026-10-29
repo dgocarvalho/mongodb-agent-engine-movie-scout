@@ -1,0 +1,7 @@
+# Public review scaffold only; not startup-approved.
+# Other host ports remain dynamically assigned by the official CLI.
+services:
+  playground:
+    port: 3301
+  mongodb:
+    local: true

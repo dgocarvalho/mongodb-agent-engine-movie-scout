@@ -1,0 +1,38 @@
+# Private configuration and credentials (all workspace directories).
+.env
+.env.*
+*.pem
+*.key
+
+# Python and local development artifacts.
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+*.egg-info/
+dist/
+build/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.pyright/
+.coverage
+htmlcov/
+
+# Native Agent Engine generated state and IDE files.
+.agentengine/
+.agentic/
+.devcontainer/
+.vscode/
+.idea/
+
+# OS/editor temporary files.
+.DS_Store
+Thumbs.db
+*.tmp
+*.swp
+*.log
+*.log.*
+logs/
+
+.specify/

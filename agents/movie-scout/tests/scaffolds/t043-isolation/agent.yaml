@@ -1,0 +1,21 @@
+# Test-only configuration contract, not an installed test runtime.
+name: movie-scout-t043-review-20261021
+entrypoint: agent_movie_scout.main:app
+framework: langgraph
+version: 0.1.0
+features:
+  durable_workflow: true
+  memory: false
+sandboxes:
+  agent:
+    secrets: [LLM_API_KEY]
+    tools: []
+  tool:
+    secrets: [LLM_API_KEY]
+    tools:
+      - get_current_date
+      - search_movies
+network:
+  egress:
+    - fqdn: api.openai.com
+      ports: [443]

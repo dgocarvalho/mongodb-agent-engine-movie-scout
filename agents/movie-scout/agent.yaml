@@ -1,0 +1,41 @@
+# Human-readable app slug used by Agent Engine tooling.
+# `agentengine create` should rewrite this when generating a new app from the template.
+name: movie-scout
+# Python import path to the SDK App instance.
+# Format: <module path>:<variable name>. This template exposes `app` from
+# src/agent_movie_scout/main.py.
+entrypoint: agent_movie_scout.main:app
+framework: langgraph
+# Runtime feature flags controlled by agent.yaml, not .env. A key that is
+# present here wins over any ENABLE_* environment variable, so declaring memory
+# keeps ambient environment state from switching it on behind your back.
+# Set memory to true to enable long-term profile memory; VOYAGE_API_KEY must be
+# present in .env when memory is enabled.
+features:
+    durable_workflow: true
+    memory: true
+# Tool placement and pass-through secrets. This template's tools are all
+# remote-capable, so they run in the tool sandbox.
+sandboxes:
+    agent:
+        secrets: ["LLM_API_KEY"]
+        tools: []
+    tool:
+        # The wrapped LLM executes here too. Semantic search uses the EXISTING
+        # Voyage values via explicit Client(api_key=..., base_url=...) binding.
+        # All tools here share these secrets; declaration is not delivery proof.
+        # Native memory is unchanged. MONGODB_URI is not a movie-client fallback.
+        secrets: ["LLM_API_KEY", "MOVIES_MONGODB_URI", "VOYAGE_API_KEY", "VOYAGE_URL"]
+        tools:
+            - get_current_date
+            - save_user_info
+            - recall_user_info
+            - search_movies
+            - search_semantic_movies
+network:
+    egress:
+        - {fqdn: api.openai.com, ports: [443]}
+        - {fqdn: us.ai.mongodb.com, ports: [443]}
+        - {fqdn: "*.*.mongodb.net", ports: [443]}
+
+version: 0.1.0
